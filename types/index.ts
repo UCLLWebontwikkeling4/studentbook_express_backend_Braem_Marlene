@@ -14,10 +14,15 @@ export interface Course {
 export interface User {
     name: string;
     status: string;
-    friends: User[];
+    friends: Friend[];
     messages: Message[];
     chats: Chat[];
     loggedIn: boolean;
+}
+
+export interface Friend{
+    name: string;
+    friendName: string;
 }
 
 export interface Message {

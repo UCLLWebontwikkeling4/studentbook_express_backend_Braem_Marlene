@@ -1,5 +1,5 @@
 import { RowDataPacket } from 'mysql2';
-import { Lecturer, Course } from '../types';
+import { Lecturer, Course } from '../../types';
 
 const mapToLecturers = (rows: RowDataPacket[]): Lecturer[] => {
     const result: Lecturer[] = [];
