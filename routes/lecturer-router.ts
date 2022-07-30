@@ -2,56 +2,49 @@
  * @swagger
  *   components:
  *    schemas:
- *      Lecturer:
+ *      message:
  *          type: object
  *          properties:
  *            id:
  *              type: number
- *            name:
+ *            text:
  *              type: string
- *              description: Lecturer's name.
- *            courses:
- *              type: array
- *              items:
- *                type: object
- *                properties:
- *                  id:
- *                    type: number
- *                  name:
- *                    type: string
- *                    description: Course name
- *                  description:
- *                    type: string
- *                    description: Course description
- *                  phase:
- *                    type: number
- *                    description: The phase within the education path
+ *              description: text of the message
+ *            datesent:
+ *              type: timestamp
+ *              description: date when message was sent
+ *            author:           
+ *              type: string
+ *              description: message author
+ *            type:  
+ *              description: message type
+ *              type: string
  */
 import express, { Request, Response, Handler } from 'express';
-import * as lecturerModel from '../model/lecturer';
-import { Lecturer } from '../types';
+import * as messageModel from '../model/message';
+import { Message } from '../types';
 
-const lecturerRouter = express.Router();
+const messageRouter = express.Router();
 
 /**
  * @swagger
- * /lecturers:
+ * /messages:
  *   get:
- *     summary: Get a list of lecturers and the courses they teach
+ *     summary: Get a list of messages (last 5 public messages)
  *     responses:
  *       200:
- *         description: A list of lecturers.
+ *         description: A list of messages.
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Lecturer'
+ *               $ref: '#/components/schemas/message'
  */
-lecturerRouter.get('/', (req: Request, res: Response) => {
-    lecturerModel.getLecturers((err: Error, lecturers: Lecturer[]) => {
+messageRouter.get('/', (req: Request, res: Response) => {
+    messageModel.getMessages((err: Error, messages: Message[]) => {
         if (err) {
             res.status(500).json({ status: 'error', errorMessage: err.message });
         } else {
-            res.status(200).json(lecturers);
+            res.status(200).json(messages);
         }
     });
 });
@@ -77,15 +70,15 @@ lecturerRouter.get('/', (req: Request, res: Response) => {
  *            type: integer
  *            format: int64
  */
-lecturerRouter.get('/:id', (req: Request, res: Response) => {
-    const lecturerId = parseInt(req.params.id);
-    lecturerModel.getLecturer(lecturerId, (error: Error, lecturer: Lecturer) => {
-        if (error) {
-            res.status(500).json({ status: 'error', errorMessage: error.message });
-        } else {
-            res.status(200).json(lecturer);
-        }
-    });
-});
+// lecturerRouter.get('/:id', (req: Request, res: Response) => {
+//     const lecturerId = parseInt(req.params.id);
+//     lecturerModel.getLecturer(lecturerId, (error: Error, lecturer: Lecturer) => {
+//         if (error) {
+//             res.status(500).json({ status: 'error', errorMessage: error.message });
+//         } else {
+//             res.status(200).json(lecturer);
+//         }
+//     });
+// });
 
-export { lecturerRouter };
+ export { messageRouter };

@@ -1,0 +1,4 @@
+In eigen woorden uitgelegt
+
+> types/index
+    = object beschrijf met wat object bevat
