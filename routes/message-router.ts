@@ -49,36 +49,5 @@ messageRouter.get('/', (req: Request, res: Response) => {
     });
 });
 
-/**
- * @swagger
- * /lecturers/{id}:
- *   get:
- *      summary: Get a lecturer by ID
- *      responses:
- *         200:
- *           description: A lecturer
- *           content:
- *              application/json:
- *                  schema:
- *                      $ref: '#/components/schemas/Lecturer'
- *      parameters:
- *        - name: id
- *          in: path
- *          description: Lecturer ID
- *          required: true
- *          schema:
- *            type: integer
- *            format: int64
- */
-// lecturerRouter.get('/:id', (req: Request, res: Response) => {
-//     const lecturerId = parseInt(req.params.id);
-//     lecturerModel.getLecturer(lecturerId, (error: Error, lecturer: Lecturer) => {
-//         if (error) {
-//             res.status(500).json({ status: 'error', errorMessage: error.message });
-//         } else {
-//             res.status(200).json(lecturer);
-//         }
-//     });
-// });
 
  export { messageRouter };

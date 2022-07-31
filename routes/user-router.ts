@@ -62,36 +62,52 @@ userRouter.post('/login', (req: Request, res: Response) => {
 });
 
 
+
 /**
  * @swagger
- * /lecturers/{id}:
- *   get:
- *      summary: Get a lecturer by ID
+ * /user/status:
+ *   put:
+ *      summary: change the status of a user
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *                  properties:
+ *                      username: 
+ *                          type: string
+ *                      status:
+ *                          type: string 
  *      responses:
  *         200:
- *           description: A lecturer
- *           content:
+ *            description: User status has changed
+ *            content:
  *              application/json:
- *                  schema:
- *                      $ref: '#/components/schemas/Lecturer'
- *      parameters:
- *        - name: id
- *          in: path
- *          description: Lecturer ID
- *          required: true
- *          schema:
- *            type: integer
- *            format: int64
+ *                schema:
+ *                  type: number
+ *                  description: Database ID
+ *         404:
+ *            description: User name couldn't be changed
+ *            content:
+ *              application/json:
+ *                schema:
+ *                  type: number
+ *                  description: Database ID
  */
-// lecturerRouter.get('/:id', (req: Request, res: Response) => {
-//     const lecturerId = parseInt(req.params.id);
-//     lecturerModel.getLecturer(lecturerId, (error: Error, lecturer: Lecturer) => {
-//         if (error) {
-//             res.status(500).json({ status: 'error', errorMessage: error.message });
-//         } else {
-//             res.status(200).json(lecturer);
-//         }
-//     });
-// });
+userRouter.put('/status', (req: Request, res: Response) => {
+    const username = <string>req.body.username;
+    const status = <string>req.body.status;
+
+    userModel.changeUserStatus(username, status,(error: Error, status: string, check: string) => {
+        if (error) {
+            res.status(404).json({ status: 'User doesn’t exist'});
+        } else {
+            res.status(200).json({ status: "Success"});
+        }
+    }
+    );
+}
+);
+
 
  export { userRouter };

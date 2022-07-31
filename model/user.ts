@@ -1,7 +1,8 @@
 import { OkPacket, ResultSetHeader, RowDataPacket } from 'mysql2';
 import mapToMessages from './message-mapper';
-import { Message } from '../types';
+import { User } from '../types';
 import { connectionPool } from '../database';
+import { exit } from 'process';
 
 
 //Story login a user (02)
@@ -22,22 +23,48 @@ const loginUser = async (
     }
 };
 
-// const getMessage = async (
-//     lecturerId: number,
-//     onResult: (error: Error, lecturer: Lecturer) => void
-// ) => {
-//     const query = `SELECT l.id AS lecturer_id, l.name AS lecturer_name, c.id AS course_id, c.name AS course_name, c.description AS course_description, c.phase AS course_phase
-//   FROM lecturer AS l, course AS c, lecturer_course AS lc
-//   WHERE l.id = ?
-//   AND l.id = lc.lecturer_id
-//   AND c.id = lc.course_id`;
 
-//     try {
-//         const [row] = await connectionPool.execute(query, [lecturerId]);
-//         onResult(null, mapToLecturers(<RowDataPacket[]>row)[0]);
-//     } catch (error) {
-//         onResult(error, null);
-//     }
-// };
+//Story change user status (03)
+const changeUserStatus = async (
+    username: string,
+    status: string,
+    onResult: (error: Error, status: string, check: string) => void
+    ) => {
+    
+        const query = `UPDATE user
+        SET 
+            status = ?
+        WHERE
+            name = ?`;
+    
+            let check  = await checkUser(username);
+            if(check != "false"){
+                const [row] = await connectionPool.execute(query, [status, username]);
+                onResult(null, status, check);
+            }else{
+                onResult(new Error('User not found'), null, check);
+            }
+                           
+        
+}
 
-export { loginUser };
+//check if user exists
+const checkUser = async (
+    username: string,
+    ) => {
+        const query = `SELECT u.name
+        from user as u
+        where u.name = ?`;
+    
+        try {
+            let res = await connectionPool.execute(query, [username]);
+            return(username + res[0][0].name);
+        } catch (error) {
+            return("false");
+        }
+}
+
+
+
+
+export { loginUser, changeUserStatus };
