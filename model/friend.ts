@@ -1,9 +1,10 @@
 import { OkPacket, ResultSetHeader, RowDataPacket } from 'mysql2';
 import mapToMessages from './message-mapper';
-import { Friend } from '../types';
+import { Friend, User } from '../types';
 import { connectionPool } from '../database';
 import { exit } from 'process';
 import mapToUsers from './user-mapper';
+import mapToFriends from './friend-mapper';
 
 
 //Story add friend (04)
@@ -27,7 +28,7 @@ const addFriend = async (
                 const query = `INSERT INTO studentBook.friend (user_name,friend_name) VALUES (?,?);`;
                 const [row] = await connectionPool.execute(query, [username, friendname]);
                 var friendInfo = mapToUsers(<RowDataPacket[]>friend)[0]
-                onResult("success", friendInfo.name + " " + friendInfo.status);
+                onResult("success", friendInfo.username + " " + friendInfo.status);
                 
                 
     
@@ -43,5 +44,24 @@ const addFriend = async (
 };
 
 
+// Story get list of friends (05)
+const getAllFriends = async (username: string, onResult: (error: Error, friends: Friend[]) => void) => {
+    const query = `SELECT  f.user_name AS user_name, friend_name as friend_friendName, u.loggedIn as user_loggedIn, u.status as user_status
+    from friend as f
+inner join user u on f.friend_name = u.name
+where user_name = ?`;
 
-export { addFriend };
+       
+        try {
+            const [rows] = await connectionPool.query(query, [username]);
+            let friends  = mapToUsers(<RowDataPacket[]>rows)[0].friends;
+            onResult(null,friends);
+            //onResult(null,[rows]);
+        } catch (error) {
+            onResult(error,[]);
+        }
+}
+
+
+
+export { addFriend, getAllFriends };

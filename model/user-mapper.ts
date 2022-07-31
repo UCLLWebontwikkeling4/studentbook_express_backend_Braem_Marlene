@@ -15,6 +15,7 @@ const mapToUsers = (rows: RowDataPacket[]): User[] => {
             message_author,
             message_type,
             friend_friendName,
+            friend_username,
         }) => {
             
             const message: Message = {
@@ -27,13 +28,14 @@ const mapToUsers = (rows: RowDataPacket[]): User[] => {
             const friend: Friend = {
                 username: user_name,
                 friendname: friend_friendName,
+                status: user_status,
             };
             const chat: Chat = {
                 Users: [],
                 Messages: [],
             };
             const user: User = {
-                name: user_name,
+                username: user_name,
                 status: user_status,
                 loggedIn: user_loggedIn,
                 messages: [message],
@@ -41,9 +43,13 @@ const mapToUsers = (rows: RowDataPacket[]): User[] => {
                 chats: [chat]
             };
 
-            const existing = result.find((el) => el.name === user_name);
+            const existing = result.find((el) => el.username === user_name);
             if (!existing) {
                 result.push(user);
+            }else{
+                existing.messages.push(message);
+                existing.friends.push(friend);
+                existing.chats.push(chat);
             }
         }
     );

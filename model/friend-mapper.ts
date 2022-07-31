@@ -8,11 +8,13 @@ const mapToFriends = (rows: RowDataPacket[]): Friend[] => {
         ({
             user_name,
             friend_name,
+            friend_status,
         }) => {
             
             const friend: Friend = {
                 username: user_name,
                 friendname: friend_name,
+                status: friend_status,
             };
          
 

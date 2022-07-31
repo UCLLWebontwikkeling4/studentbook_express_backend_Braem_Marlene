@@ -12,7 +12,7 @@ export interface Course {
 }
 
 export interface User {
-    name: string;
+    username: string;
     status: string;
     friends: Friend[];
     messages: Message[];
@@ -23,6 +23,7 @@ export interface User {
 export interface Friend{
     username: string;
     friendname: string;
+    status: string;
 }
 
 export interface Message {
