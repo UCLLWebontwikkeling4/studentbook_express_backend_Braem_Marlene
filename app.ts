@@ -6,6 +6,7 @@ import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import { messageRouter } from './routes/message-router';
 import { userRouter } from './routes/user-router';
+import { friendRouter } from './routes/friend-router';
 
 
 const app = express();
@@ -27,6 +28,7 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use('/messages', messageRouter);
 app.use('/user', userRouter);
+app.use('/friends', friendRouter);
 
 
 app.get('/status', (req, res) => {

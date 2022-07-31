@@ -21,8 +21,8 @@ export interface User {
 }
 
 export interface Friend{
-    name: string;
-    friendName: string;
+    username: string;
+    friendname: string;
 }
 
 export interface Message {

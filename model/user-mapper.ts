@@ -25,8 +25,8 @@ const mapToUsers = (rows: RowDataPacket[]): User[] => {
                 type: message_type,
             };
             const friend: Friend = {
-                name: user_name,
-                friendName: friend_friendName,
+                username: user_name,
+                friendname: friend_friendName,
             };
             const chat: Chat = {
                 Users: [],
