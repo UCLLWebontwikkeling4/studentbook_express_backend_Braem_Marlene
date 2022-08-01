@@ -99,4 +99,41 @@ messageRouter.get('/', (req: Request, res: Response) => {
         }
     });
 });
+
+
+//Story get a list of friends messages (07)
+/**
+ * @swagger
+ * /messages/{username}:
+ *   get:
+ *      summary: Get a list of the last 5 public messages of a friend
+ *      responses:
+ *         200:
+ *           description: A list of messages
+ *           content:
+ *              application/json:
+ *                  schema:
+ *                      $ref: '#/components/schemas/message'
+ *      parameters:
+ *        - name: username
+ *          in: path
+ *          description: Username
+ *          required: true
+ *          schema:
+ *            type: string
+ *            format: int64
+ */
+
+    messageRouter.get('/:username', (req: Request, res: Response) => {
+        const username = req.params.username;
+        messageModel.getMessagesOfFriend(username, (error: Error, messages: Message[]) => {
+            if (error) {
+                res.status(404).json(messages);
+            } else {
+                res.status(200).json(messages);
+            }
+                
+        });
+});
+
  export { messageRouter };
