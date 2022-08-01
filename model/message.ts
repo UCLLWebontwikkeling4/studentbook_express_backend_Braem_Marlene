@@ -20,22 +20,20 @@ const getMessages = async (onResult: (error: Error, lecturers: Message[]) => voi
     }
 };
 
-// const getMessage = async (
-//     lecturerId: number,
-//     onResult: (error: Error, lecturer: Lecturer) => void
-// ) => {
-//     const query = `SELECT l.id AS lecturer_id, l.name AS lecturer_name, c.id AS course_id, c.name AS course_name, c.description AS course_description, c.phase AS course_phase
-//   FROM lecturer AS l, course AS c, lecturer_course AS lc
-//   WHERE l.id = ?
-//   AND l.id = lc.lecturer_id
-//   AND c.id = lc.course_id`;
+// Story add message (06)
+const addMessage = async ( author: string ,text: string,type: string,dateSent: Date,
+    onResult: (error: boolean,message: string) => void
+) => {
+     const query = `INSERT INTO studentBook.message (dateSent, author_id,text,type) 
+    VALUES (?, ?, ?,?);`;
 
-//     try {
-//         const [row] = await connectionPool.execute(query, [lecturerId]);
-//         onResult(null, mapToLecturers(<RowDataPacket[]>row)[0]);
-//     } catch (error) {
-//         onResult(error, null);
-//     }
-// };
 
-export { getMessages };
+         try{
+             const [row] = await connectionPool.execute(query,[dateSent,author,text,type]);    
+            onResult(null,"success");
+         } catch (error){
+            onResult(error,error.text);
+    } 
+};
+
+export { getMessages, addMessage };

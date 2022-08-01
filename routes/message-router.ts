@@ -49,5 +49,54 @@ messageRouter.get('/', (req: Request, res: Response) => {
     });
 });
 
+//Story add message (06)
+/**
+ * @swagger
+ * /messages:
+ *   post:
+ *      summary: Adds a message
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *              schema:
+ *                  properties:
+ *                      author: 
+ *                          type: string
+ *                      text: 
+ *                          type: string 
+ *                      type: 
+ *                          type: string    
+ * 
+ *      responses:
+ *         200:
+ *            description: Message added 
+ *            content:
+ *              application/json:
+ *                schema:
+ *                      $ref: '#/components/schemas/message'
+ *         403:
+ *            description: Message couldnt be added
+ *            content:
+ *              application/json:
+ *                schema:
+ *                      $ref: '#/components/schemas/message'
+ */
+ messageRouter.post('/', (req: Request, res: Response) => {
 
+    const author = <string>req.body.author;
+    const text = <string>req.body.text;
+    const type = <string>req.body.type;
+    
+    const dateSent = new Date(Date.now())
+    
+    messageModel.addMessage(author,text,type,dateSent, (error: boolean, name: string) => {
+       
+        if (error) {
+            res.status(403).json({ status: 'Forbidden'});
+        } else {
+            res.status(200).json({ status: 'Success'});
+        }
+    });
+});
  export { messageRouter };
